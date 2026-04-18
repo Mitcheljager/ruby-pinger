@@ -12,13 +12,12 @@ def ping_and_log(url, interval)
     end_time = Time.now
 
     result = "#{start_time_formatted} | URL: #{url} | Status: #{response.code} | Response time: #{end_time - start_time}\n"
-
-    puts result
-
-    File.write(file, result, mode: "a")
   rescue => error
-    File.write(file, "#{start_time_formatted} | Error: #{error}", mode: "a")
+    result = "#{start_time_formatted} | Error: #{error}"
   end
+
+  puts result
+  File.write(file, result, mode: "a")
 
   sleep interval
 
