@@ -34,7 +34,7 @@ def ping_and_log(url, interval)
 end
 
 def evaluate_logs
-  threshold = 5
+  threshold = 3
   max_number_of_violations = 3
   number_of_evaluations = 10
   total_violations = 0
