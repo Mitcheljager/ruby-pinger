@@ -1,9 +1,14 @@
 require "httparty"
 require "tempfile"
 require "tmpdir"
+require "json"
+require "dotenv"
 
 $log = "log.txt"
 $is_alerting = false
+
+Dotenv.load
+File.write($log, "")
 
 def ping_and_log(url, interval)
   start_time = Time.now
@@ -29,8 +34,8 @@ def ping_and_log(url, interval)
 end
 
 def evaluate_logs
-  threshold = 0.2
-  number_of_violations_threshold = 3
+  threshold = 5
+  max_number_of_violations = 3
   number_of_evaluations = 10
   total_violations = 0
 
@@ -43,20 +48,36 @@ def evaluate_logs
     total_violations += 1 if current > threshold
   end
 
-  if total_violations > number_of_violations_threshold
+  if total_violations >= max_number_of_violations
     if !$is_alerting
       $is_alerting = true
-      puts "Shit is slow"
+      post_to_webhook("#{ENV["NAME"]} appears to be slow", "Response times were very slow over the past few minutes.", 12533053)
     end
   else
     if $is_alerting
       $is_alerting = false
-      puts "Shit is no longer slow"
+      post_to_webhook("#{ENV["NAME"]} appears to be back", "Response times seem to be back to normal, let's hope it stays that way.", 4177780)
     end
   end
 end
 
-File.write($log, "")
+def post_to_webhook(title, description, color)
+  response = HTTParty.post(ENV["WEBHOOK_URL"],
+    headers: { "Content-Type" => "application/json" },
+    body: {
+      embeds: [{
+        title:,
+        description:,
+        color:,
+        footer: {
+          text: Time.now.strftime('%Y-%m-%dT%H:%M:%S.%L%z')
+        }
+      }]
+    }.to_json
+  )
+rescue => error
+  puts "Failed to post to webhook: #{error.message}"
+end
 
 url = ARGV[0]
 interval = (ARGV[1] || 10).to_i
