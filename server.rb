@@ -7,7 +7,7 @@ while session = server.accept
   request = session.gets
 
   session.print "HTTP/1.1 200\r\n"
-  session.print "Content-Type: text/json\r\n"
+  session.print "Content-Type: application/json\r\n"
   session.print "\r\n"
 
   max_lines = 2880
