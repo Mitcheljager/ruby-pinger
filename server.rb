@@ -8,6 +8,9 @@ while session = server.accept
 
   session.print "HTTP/1.1 200\r\n"
   session.print "Content-Type: application/json\r\n"
+  session.print "Access-Control-Allow-Headers: *\r\n"
+  session.print "Access-Control-Allow-Methods: GET\r\n"
+  session.print "Access-Control-Allow-Origin: *\r\n"
   session.print "\r\n"
 
   max_lines = 2880
