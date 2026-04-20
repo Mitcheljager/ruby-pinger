@@ -28,9 +28,6 @@ def ping_and_log(url, interval)
   evaluate_logs()
 
   puts result
-  sleep interval
-
-  ping_and_log(url, interval)
 end
 
 def evaluate_logs
@@ -84,7 +81,11 @@ interval = (ARGV[1] || 10).to_i
 
 if url
   puts "Starting..."
-  ping_and_log(url || "", interval)
+
+  loop do
+    ping_and_log(url || "", interval)
+    sleep interval
+  end
 else
   puts "No url given"
 end
