@@ -8,7 +8,6 @@ $log = "log.txt"
 $is_alerting = false
 
 Dotenv.load
-File.write($log, "")
 
 def ping_and_log(url, interval)
   start_time = Time.now
