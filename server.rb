@@ -22,7 +22,7 @@ while session = server.accept
     output = ""
 
     lines[-([max_lines, lines.length].min)..-1].each do |line|
-      output += "{\"datetime\": \"#{line.split(" | ")[0]}\", \"response_time\": \"#{line.split("Response time: ")[1].to_f}\"},"
+      output += "{\"datetime\": \"#{line.split(" | ")[0]}\", \"response_time\": #{line.split("Response time: ")[1].to_f}},"
     end
 
     session.print "[#{output.chomp(",")}]"
